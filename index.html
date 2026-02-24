@@ -332,6 +332,70 @@ h1{
     color: #ff85c1;              /* світліший колір тексту */
     text-decoration-color: #ffb0d3; /* підкреслення світліше */
 }
+
+@media(max-width:900px){
+    /* Контейнер стає вертикальним */
+    .container{
+        flex-direction: column;
+        align-items: center;
+        margin-right: 0; /* прибираємо зсув праворуч */
+        padding: 10px;
+    }
+
+    /* Текстова інформація під обкладинкою */
+    .info{
+        margin-left: 0;
+        text-align: center;
+        width: 90%;
+    }
+
+    /* Обкладинка масштабується */
+    .cover img{
+        width: 70%;
+        margin-bottom: 15px;
+    }
+
+    /* Статистика по вертикалі */
+    .stats{
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Персонажі */
+    .characters{
+        position: static; /* прибираємо fixed */
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 10px;
+        justify-items: center;
+        margin-top: 20px;
+    }
+
+    .characters .char{
+        width: 100px; /* зменшуємо картинки */
+        height: auto;
+        border-radius: 12px;
+    }
+
+    .char-name{
+        font-size: 12px; /* зменшуємо підписи */
+    }
+
+    .chapters{
+        max-width: 100%;
+        margin-right: 0;
+        padding-right: 10px;
+    }
+
+    .button{
+        width: auto;
+        max-width: 90%;
+        text-align: center;
+    }
+}
+	
 </style>
 </head>
 
@@ -507,4 +571,5 @@ h1{
 </script>
 
 </body>
+
 </html>  
