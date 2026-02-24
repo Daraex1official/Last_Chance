@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вхід / Реєстрація</title>
+<style>
+/* Центрування та базовий стиль */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial;
+    background: #0f0f0f;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    border-radius: 6px;
+    border: none;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 20px;
+    background: #ff2e63;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+#user-info {
+    margin-top: 10px;
+}
+
+/* Мобільна адаптивність */
+@media (max-width: 600px) {
+    html, body {
+        align-items: flex-start; /* форма зверху на телефонах */
+        padding-top: 20px;
+    }
+
+    .container {
+        max-width: 100%;
+        margin: 10px;
+        padding: 15px;
+    }
+
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Вхід / Реєстрація</h2>
+
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Пароль">
+
+    <button id="signup-btn">Реєстрація</button>
+    <button id="login-btn">Увійти</button>
+
+    <div id="user-info"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDfVhC6r49PkrUcL9etw35KC809gva9xME",
+  authDomain: "last-chance-79208.firebaseapp.com",
+  projectId: "last-chance-79208",
+  storageBucket: "last-chance-79208.firebasestorage.app",
+  messagingSenderId: "804424139867",
+  appId: "1:804424139867:web:a9309f6886b65c7223eb7e"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+
+// Реєстрація
+document.getElementById("signup-btn").addEventListener("click", async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+    alert("Реєстрація пройшла успішно!");
+  } catch (error) {
+    alert(error.message);
+  }
+});
+
+// Вхід
+document.getElementById("login-btn").addEventListener("click", async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    alert("Вхід успішний!");
+  } catch (error) {
+    alert(error.message);
+  }
+});
+
+// Перевірка стану користувача
+onAuthStateChanged(auth, user => {
+  if (user) {
+    document.getElementById("user-info").innerText = `Ви увійшли як: ${user.email}`;
+  } else {
+    document.getElementById("user-info").innerText = "Не увійшли";
+  }
+});
+</script>
+
+</body>
+</html>

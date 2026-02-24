@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Читати спочатку - Last chance</title>
+
+<style>
+
+.reader-nav a{
+    background: #ff2e63;
+    color: white;
+    text-decoration: none;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 35px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.reader-nav a:hover{
+    background: #ff4b81;
+}
+
+body{
+    margin:0;
+    font-family:Arial;
+    background:#0f0f0f;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+h1{
+    margin-top:20px;
+}
+
+/* контейнер для читання */
+#reader{
+    width:100%;
+    max-width:600px;
+    height:80vh;
+    position:relative;
+    margin-top:20px;
+}
+
+#reader img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    border-radius:5px;
+    user-select:none;
+}
+
+/* область для кліків по сторінках */
+.nav-left, .nav-right{
+    position:absolute;
+    top:0;
+    width:50%;
+    height:100%;
+    cursor:pointer;
+}
+
+.nav-left{ left:0; }
+.nav-right{ right:0; }
+
+/* інформація про сторінку */
+.page-info{
+    margin-top:10px;
+    text-align:center;
+}
+
+/* кнопки глав */
+.chapter-buttons{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin:10px 0;
+}
+
+.chapter-buttons button{
+    background:#ff2e63;
+    color:white;
+    border:none;
+    padding:8px 15px;
+    margin:5px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.chapter-buttons button:hover{
+    background:#ff4b81;
+}
+
+/* адаптивно для телефону */
+@media(max-width:700px){
+    #reader{ max-width:95%; height:70vh; }
+}
+
+.reader-nav{
+    position: sticky;
+    top: 10px;
+    z-index: 100;
+	display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 15px;
+	background: #0f0f0f;   /* чорний фон */
+    padding: 12px 20px;
+}
+
+/* Навігаційна панель зверху */
+.reader-nav{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    background: #0f0f0f;      /* фон чорний */
+    padding: 8px 10px;         /* менший відступ для компактності */
+    border-bottom: 1px solid #222; /* акуратно відокремлює від контенту */
+}
+
+/* Кнопки стрілок */
+.reader-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 0;               /* прибираємо відступи зверху/знизу */
+    width: 29vw;            /* тягнеться на всю ширину екрану */
+    background: #0f0f0f;     /* чорний фон */
+    padding: 8px 0;          /* менший відступ, але по горизонталі повністю тягнеться */
+    border-bottom: 1px solid #222; /* акуратно відокремлює від контенту */
+    box-sizing: border-box;   /* щоб padding не “різав” ширину */
+}
+
+.reader-nav a:hover{
+    background: #ff4b81;       /* ефект при наведенні */
+}
+
+/* Текст з назвою глави */
+.reader-nav span{
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+#comments-section{
+    max-width:600px;
+    width:100%;
+    margin:40px auto;
+}
+
+#commentText{
+    width:100%;
+    height:80px;
+    background:#1c1c1c;
+    color:white;
+    border:none;
+    padding:10px;
+    border-radius:8px;
+    resize:none;
+}
+
+#comment-form button{
+    margin-top:10px;
+    background:#ff2e63;
+    color:white;
+    border:none;
+    padding:8px 16px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.comment{
+    background:#1c1c1c;
+    padding:10px;
+    border-radius:8px;
+    margin-top:10px;
+}
+
+.comment small{
+    color:#aaa;
+}
+
+</style>
+</head>
+<body>
+
+<div class="reader-nav">
+    <a id="prevChapter">←</a>
+
+    <span id="chapterTitle">Глава</span>
+
+    <a id="nextChapter">→</a>
+</div>
+
+<h1>Last chance</h1>
+
+
+<!-- Область читання -->
+<div id="reader">
+    <img id="currentPage" src="" alt="Сторінка коміксу">
+    <div class="nav-left" onclick="prevPage()"></div>
+    <div class="nav-right" onclick="nextPage()"></div>
+</div>
+
+<!-- Інформація про сторінку -->
+<div class="page-info">
+    <p id="chapterTitle"></p>
+    <p>Сторінка: <span id="pageNumber">1</span></p>
+</div>
+
+<script>
+
+// Масив всіх глав та їхніх сторінок
+let manga = [
+    { title: "Глава 1", pages: ["заставка1.jpg","Прикладмім.jpg","Прикладастро1.jpg","Прикладастро2.jpg"] },
+    { title: "Глава 2", pages: ["заставка2.jpg","Приклад3.jpg","Приклад4.jpg","Приклад5.jpg"] },
+    { title: "Глава 3", pages: ["г3_1.jpg","г3_2.jpg"] },
+    { title: "Глава 4", pages: ["г4_1.jpg","г4_2.jpg"] },
+    { title: "Глава 5", pages: ["г5_1.jpg","г5_2.jpg"] },
+	{ title: "Глава 6", pages: ["г6_1.jpg","г6_2.jpg"] },
+	{ title: "Глава 7", pages: ["г7_1.jpg","г7_2.jpg"] },
+    { title: "Глава 8", pages: ["г8_1.jpg","г8_2.jpg"] },
+	{ title: "Глава 9", pages: ["г9_1.jpg","г9_2.jpg"] },
+    { title: "Глава 10", pages: ["г10_1.jpg","г10_2.jpg"] }	
+];
+
+let currentChapter = 0;
+let currentPage = 0;
+
+// --- Цей блок зчитує параметр chapter з URL ---
+const urlParams = new URLSearchParams(window.location.search);
+const startChapter = parseInt(urlParams.get('chapter'));
+if(!isNaN(startChapter) && startChapter >= 0 && startChapter < manga.length){
+    currentChapter = startChapter;
+    currentPage = 0;
+}
+
+
+// Функції показу та листання сторінок
+function showPage(){
+    let chapter = manga[currentChapter];
+    document.getElementById("currentPage").src = chapter.pages[currentPage];
+    document.getElementById("pageNumber").innerText = (currentPage + 1) + " / " + chapter.pages.length;
+    document.getElementById("chapterTitle").innerText = chapter.title;
+}
+
+function nextPage(){
+    if(currentPage < manga[currentChapter].pages.length - 1){
+        currentPage++;
+    } else if(currentChapter < manga.length - 1){
+        currentChapter++;
+        currentPage = 0;
+    }
+    showPage();
+}
+
+function prevPage(){
+    if(currentPage > 0){
+        currentPage--;
+    } else if(currentChapter > 0){
+        currentChapter--;
+        currentPage = manga[currentChapter].pages.length - 1;
+    }
+    showPage();
+}
+
+// Свайпи для телефону
+let startX = 0;
+let reader = document.getElementById("reader");
+reader.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+reader.addEventListener('touchend', e => {
+    let endX = e.changedTouches[0].clientX;
+    if(endX < startX - 30) nextPage();
+    if(endX > startX + 30) prevPage();
+});
+
+// Показ першої сторінки
+window.onload = () => {
+    // перевірка параметра chapter
+    const urlParams = new URLSearchParams(window.location.search);
+    const startChapter = parseInt(urlParams.get('chapter'));
+    if(!isNaN(startChapter) && startChapter >= 0 && startChapter < manga.length){
+        currentChapter = startChapter;
+        currentPage = 0;
+    }
+    showPage();
+};
+
+</script>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+let chapter = parseInt(params.get("chapter")) || 0;
+
+const totalChapters = 130; // ← зміни на свою кількість глав
+
+document.getElementById("chapterTitle")
+.innerText = "Глава " + (chapter + 1);
+
+// кнопка назад
+document.getElementById("prevChapter").href =
+chapter > 0
+? "reader.html?chapter=" + (chapter - 1)
+: "#";
+
+// кнопка вперед
+document.getElementById("nextChapter").href =
+chapter < totalChapters - 1
+? "reader.html?chapter=" + (chapter + 1)
+: "#";
+
+</script>
+
+<!-- Коментарі -->
+<div id="comments-section">
+  <h2>Коментарі</h2>
+
+  <!-- форма (видна тільки для залогінених) -->
+  <div id="comment-form" style="display:none;">
+    <textarea id="commentText" placeholder="Напишіть коментар..."></textarea>
+    <button onclick="addComment()">Опублікувати</button>
+  </div>
+
+  <!-- якщо не увійшов -->
+  <p id="loginHint">
+    Щоб писати коментарі, увійдіть або створіть акаунт
+  </p>
+
+  <!-- список коментарів -->
+  <div id="commentsList"></div>
+<div id="showMoreContainer"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDfVhC6r49PkrUcL9etw35KC809gva9xME",
+  authDomain: "last-chance-79208.firebaseapp.com",
+  projectId: "last-chance-79208",
+  storageBucket: "last-chance-79208.firebasestorage.app",
+  messagingSenderId: "804424139867",
+  appId: "1:804424139867:web:a9309f6886b65c7223eb7e"
+};
+
+// 🔥 ІНІЦІАЛІЗАЦІЯ FIREBASE (ОЦЕ І Є "firebase init", АЛЕ ДЛЯ САЙТУ)
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// елементи
+const commentForm = document.getElementById("comment-form");
+const loginHint = document.getElementById("loginHint");
+const commentsList = document.getElementById("commentsList");
+
+// 🔐 перевірка входу
+onAuthStateChanged(auth, user => {
+  if(user){
+    commentForm.style.display = "block";
+    loginHint.style.display = "none";
+  } else {
+    commentForm.style.display = "none";
+    loginHint.style.display = "block";
+  }
+});
+
+// ➕ додати коментар
+window.addComment = async function(){
+  const text = document.getElementById("commentText").value.trim();
+  if(!text) return;
+
+  await addDoc(collection(db, "comments"), {
+    text: text,
+    user: auth.currentUser.email,
+    time: Date.now()
+  });
+
+  document.getElementById("commentText").value = "";
+};
+
+let allComments = [];
+let showingAll = false;
+
+onSnapshot(q, snapshot => {
+  allComments = [];
+  snapshot.forEach(doc => {
+    allComments.push(doc.data());
+  });
+
+  renderComments();
+});
+
+function renderComments(){
+  commentsList.innerHTML = "";
+  const showMoreContainer = document.getElementById("showMoreContainer");
+
+  let commentsToShow = showingAll ? allComments : allComments.slice(0, 2);
+
+  commentsToShow.forEach(c => {
+    commentsList.innerHTML += `
+      <div class="comment">
+        <small>${c.user}</small>
+        <p>${c.text}</p>
+      </div>
+    `;
+  });
+
+  // якщо коментарів більше 2
+  if(!showingAll && allComments.length > 2){
+    const remaining = allComments.length - 2;
+    showMoreContainer.innerHTML = `
+      <span style="cursor:pointer; color:#ff2e63;">
+        Показати ще ${remaining} коментарів
+      </span>
+    `;
+
+    showMoreContainer.onclick = () => {
+      showingAll = true;
+      renderComments();
+    };
+
+  } else {
+    showMoreContainer.innerHTML = "";
+  }
+}
+
+</script>
+
+<script>
+let showAll = false;
+
+function renderComments(comments) {
+  const list = document.getElementById("commentsList");
+  const more = document.getElementById("showMoreContainer");
+
+  list.innerHTML = "";
+  more.innerHTML = "";
+
+  const visible = showAll ? comments : comments.slice(0, 2);
+
+  visible.forEach(text => {
+    const div = document.createElement("div");
+    div.className = "comment";
+    div.innerText = text;
+    list.appendChild(div);
+  });
+
+  if (!showAll && comments.length > 2) {
+    const left = comments.length - 2;
+    more.innerHTML = `<a href="#" onclick="showAllComments(${comments.length})">
+      Показати ще ${left} коментарів
+    </a>`;
+  }
+}
+
+function showAllComments(total) {
+  showAll = true;
+  renderComments(exampleComments);
+}
+
+/* приклад коментарів — ДЛЯ ПЕРЕВІРКИ */
+const exampleComments = [
+  "Дуже класний комікс!",
+  "Мені подобається стиль 💜",
+  "Коли буде нова глава?",
+  "Астро топ персонаж",
+  "Чекаю продовження"
+];
+
+renderComments(exampleComments);
+</script>
+
+</body>
+</html>

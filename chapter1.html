@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Глава 1 - Ставка на життя</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#0f0f0f;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    overflow:hidden;
+}
+
+#reader{
+    width:100%;
+    max-width:600px;
+    height:100%;
+    position:relative;
+}
+
+#reader img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    border-radius:5px;
+    user-select:none;
+}
+
+/* область для кліків */
+.nav-left, .nav-right{
+    position:absolute;
+    top:0;
+    width:50%;
+    height:100%;
+    cursor:pointer;
+}
+
+.nav-left{
+    left:0;
+}
+
+.nav-right{
+    right:0;
+}
+</style>
+</head>
+
+<body>
+
+<div id="reader">
+    <img id="currentPage" src="заставка1.jpg" alt="Сторінка 1">
+	function showPage(index){
+    document.getElementById("currentPage").src = pages[index];
+    document.getElementById("pageNumber").innerText = index + 1;
+}
+	<div class="page-info">
+  <p>Назва коміксу: Last chance</p>
+  <p>Глава: 1</p>
+  <p>Сторінка: <span id="pageNumber">1</span> / 3</p>
+</div>
+
+    <div class="nav-left" onclick="prevPage()"></div>
+    <div class="nav-right" onclick="nextPage()"></div>
+</div>
+
+<script>
+let pages = ["заставка1.jpg","Прикладмім.jpg","Прикладастро1.jpg","Прикладастро2.jpg"]; // сюди вставляй всі картинки своєї манги
+let current = 0;
+
+function showPage(index){
+    document.getElementById("currentPage").src = pages[index];
+}
+
+function nextPage(){
+    if(current < pages.length -1){
+        current++;
+        showPage(current);
+    }
+}
+
+function prevPage(){
+    if(current > 0){
+        current--;
+        showPage(current);
+    }
+}
+
+// Додатково можна свайп для телефону
+let startX = 0;
+let reader = document.getElementById("reader");
+
+reader.addEventListener('touchstart', function(e){
+    startX = e.touches[0].clientX;
+});
+
+reader.addEventListener('touchend', function(e){
+    let endX = e.changedTouches[0].clientX;
+    if(endX < startX - 30) nextPage(); // свайп вліво → наступна
+    if(endX > startX + 30) prevPage(); // свайп вправо → попередня
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Last chance</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    background: linear-gradient(
+        to left,
+        #8a3dbb 0%,     /* дуже яскравий фіолетовий старт */
+        #6a2e9a 18%,
+        #3a1b55 45%,
+        #0f0f0f 85%
+    );
+    color:white;
+	min-height: 170vh;
+}
+
+@media (max-width: 900px) {
+    body {
+        background: #0f0f0f;
+    }
+}
+
+/* контейнер */
+.container{
+    display:flex;
+    flex-wrap:wrap;
+    padding:20px;
+}
+
+/* обкладинка */
+.cover img{
+    width:250px;
+    border-radius:10px;
+}
+
+/* інформація */
+.info{
+    margin-left:30px;
+    max-width:600px;
+}
+
+h1{
+    margin-top:0;
+}
+
+.button{
+    background:#ff2e63;
+    padding:12px 25px;
+    display:inline-block;
+    margin-top:15px;
+    border-radius:6px;
+    text-decoration:none;
+    color:white;
+}
+
+/* глави */
+.chapters{
+    padding:20px;
+}
+
+.chapter{
+    background:#1c1c1c;
+    padding:15px;
+    margin:10px 0;
+    border-radius:6px;
+}
+
+/* телефон */
+@media(max-width:700px){
+
+.container{
+    flex-direction:column;
+    align-items:center;
+}
+
+.info{
+    margin-left:0;
+    text-align:center;
+}
+
+.cover img{
+    width:70%;
+}
+
+}
+
+
+.characters{
+    position:fixed;
+    right:20px;
+    top:120px;
+    width:140px;
+}
+
+.char{
+    width:100%;
+    margin-bottom:10px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.char:hover{
+    transform:scale(1.05);
+}
+
+/* Блок персонажів збоку */
+.characters {
+    position: fixed;
+    top: 100px;
+    right: 30px;
+    display: flex;
+    flex-wrap: wrap;       /* щоб два ряди по 3 фото */
+    width: 700px;          /* ширина всього блоку */
+    gap: 10px 15px;        /* 10px вертикально, 15px горизонтально */
+}
+
+.characters .char {
+    width: 220px;
+    height: auto;          /* висота під пропорції картинки */
+    border-radius: 20px;   /* гарно округлені краї */
+    object-fit: contain;    /* нічого не обрізає */
+    cursor: pointer;
+    transition: 0.3s;
+   
+ box-shadow:
+        0 0 10px rgba(0,0,0,0.9),   /* чіткий контур */
+        0 14px 26px rgba(0,0,0,0.85); /* довга тінь вниз */
+}
+
+.characters .char:hover {
+    transform: scale(1.05);
+}
+
+/* Адаптивно для телефону */
+@media(max-width:900px){
+    .characters {
+        position: static;
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .characters .char {
+        width: 100px;
+        height: auto;
+        border-radius: 12px;
+    }
+}
+
+/* Зсув контенту праворуч, щоб не заходив під персонажів */
+.container, .chapters {
+    margin-right: 740px; /* трохи більше за ширину .characters */
+}
+
+.characters{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    justify-items: center;
+	margin-top: -80px;
+}
+
+/* перший рядок — 2 персонажі */
+.characters .char:nth-child(1){
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.characters .char:nth-child(2){
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.characters h2 {
+    width: 100%;
+    color: white;
+    margin-bottom: 10px;
+    text-align: center; /* заголовок по центру блоку */
+    font-size: 24px;
+}
+
+.char-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.characters .char {
+    width: 140px;
+    height: auto;
+    border-radius: 20px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: 0.3s;
+    background-color: #111;
+}
+
+.characters .char:hover {
+    transform: scale(1.05);
+}
+
+.char-name {
+    color: white;
+    margin-top: -7px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Адаптивно для телефону */
+@media(max-width:900px){
+    .characters {
+        position: static;
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .char-box {
+        width: 100px;
+    }
+
+    .characters .char {
+        width: 100px;
+        height: auto;
+        border-radius: 12px;
+    }
+
+    .char-name {
+        font-size: 12px;
+    }
+
+    .characters h2 {
+        font-size: 18px;
+    }
+}
+
+/* Зсув контенту праворуч */
+.container, .chapters {
+    margin-right: 580px;
+}
+
+.char-box.last {
+    grid-column: 2;
+}
+
+.characters .char:nth-child(1){
+    grid-column: 2;
+}
+
+.characters .char:nth-child(2){
+    grid-column: 3;
+}
+
+.chapters {
+    max-width: calc(100vw - 750px); /* ширина екрана мінус персонажі */
+    box-sizing: border-box;
+	padding-right: 20px;
+}
+
+.chapter {
+    display: block;
+}
+
+.site-footer{
+    text-align: left;
+    font-size: 12px;
+    color: #777;
+    padding: 20px 20px;
+	margin-top: -25px;   /* піднімає вгору */
+}
+
+.stats{
+    display:flex;
+    gap:20px;
+    margin-top:20px;
+}
+
+.stat{
+    background:#1c1c1c;
+    padding:12px 16px;
+    border-radius:10px;
+    text-align:center;
+    min-width:110px;
+}
+
+.stat-number{
+    display:block;
+    font-size:20px;
+    font-weight:bold;
+    color:#ff2e63;
+}
+
+.stat-label{
+    font-size:12px;
+    color:#aaa;
+}
+
+.characters .char-box:nth-child(n+3):nth-child(-n+6) {
+    margin-top: -8px;
+}
+
+.characters .char-box:nth-child(n+7):nth-child(-n+10) {
+    margin-top: -20px;
+}
+
+.characters .char-box:nth-child(1),
+.characters .char-box:nth-child(2) {
+    margin-top: -8px;
+}
+
+/* Стиль посилання */
+.highlight-link {
+    color: #ff5ca2;             /* гармонійний рожево-фіолетовий */
+    font-weight: bold;           /* жирний для акценту */
+    text-decoration: underline;  /* підкреслення */
+    text-underline-offset: 3px;  /* відступ підкреслення від тексту */
+    transition: color 0.3s, text-decoration-color 0.3s;
+    text-decoration-color: #ff85c1; /* світліший відтінок підкреслення */
+}
+
+/* При наведенні */
+.highlight-link:hover {
+    color: #ff85c1;              /* світліший колір тексту */
+    text-decoration-color: #ffb0d3; /* підкреслення світліше */
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="cover">
+<img src="Прикладмім.jpg" alt="Обкладинка коміксу">
+</div>
+
+<div class="info">
+<h1>Останній шанс</h1>
+
+<p>
+Опис манги. Тут буде історія,
+сюжет або вступ.
+</p>
+
+<p><b>Автор:</b>Moonlight, Daraex, Neon Neon, Свята, Goldyn</p>
+<p><b>Жанр:</b> Fantasy, Drama</p>
+<p><b>Статус:</b> Ongoing</p>
+
+<a class="button" href="reader.html">
+Читати спочатку
+</a>
+
+<div id="comments-info">
+  <p>Щоб залишити коментар, <a href="login.html" class="highlight-link">увійдіть або зареєструйтеся</a>.</p>
+</div>
+
+<div class="stats">
+<div class="stat">
+  <b id="views">0</b><br>
+  Переглядів
+</div>
+
+  <div class="stat">
+    <span class="stat-number">4.7</span>
+    <span class="stat-label">Оцінка</span>
+  </div>
+
+  <div class="stat">
+    <span class="stat-number">10</span>
+    <span class="stat-label">Глав</span>
+  </div>
+</div>
+
+</div>
+
+</div>
+
+<div class="chapters">
+<h2>Глави</h2>
+
+<a href="reader.html?chapter=0" class="chapter">Глава 1</a>
+<a href="reader.html?chapter=1" class="chapter">Глава 2</a>
+<a href="reader.html?chapter=2" class="chapter">Глава 3</a>
+<a href="reader.html?chapter=3" class="chapter">Глава 4</a>
+<a href="reader.html?chapter=4" class="chapter">Глава 5</a>
+<a href="reader.html?chapter=5" class="chapter">Глава 6</a>
+<a href="reader.html?chapter=6" class="chapter">Глава 7</a>
+<a href="reader.html?chapter=7" class="chapter">Глава 8</a>
+<a href="reader.html?chapter=8" class="chapter">Глава 9</a>
+<a href="reader.html?chapter=9" class="chapter">Глава 10</a>
+
+</div>
+
+<div class="container">
+  <!-- основний контент -->
+</div>
+
+<div class="side-gradient"></div>
+
+<div class="characters">
+  <!-- персонажі -->
+</div>
+
+<div class="characters">
+  <h2>Персонажі:</h2>
+  
+  <div class="char-box">
+    <a href="character1.html"><img src="Айлин.ориг.jpg" class="char"></a>
+    <p class="char-name">Айлін</p>
+  </div>
+  
+  <div class="char-box">
+    <a href="character2.html"><img src="Ніка.ориг.jpg" class="char"></a>
+    <p class="char-name">Ніка</p>
+  </div>
+  
+  <div class="char-box">
+    <a href="character3.html"><img src="Луріан.ориг.jpg" class="char"></a>
+    <p class="char-name">Луріан</p>
+  </div>
+  
+  <div class="char-box">
+    <a href="character4.html"><img src="ПрикладаАстро.jpg" class="char"></a>
+    <p class="char-name">Астро</p>
+  </div>
+  
+  <div class="char-box">
+    <a href="character5.html"><img src="прикладсвята.jpg" class="char"></a>
+    <p class="char-name">Віккі</p>
+  </div>
+  
+  <div class="char-box">
+    <a href="character6.html"><img src="Умбра.ориг.jpg" class="char"></a>
+    <p class="char-name">Умбра</p>
+  </div>
+  
+  <div class="char-box">
+    <a href="character7.html"><img src="пример3.jpg" class="char"></a>
+    <p class="char-name">Флора</p>
+</div>
+
+<div class="char-box">
+    <a href="character8.html"><img src="пример4.jpg" class="char"></a>
+    <p class="char-name">Арлекін</p>
+</div>
+
+<div class="char-box">
+    <a href="character9.html"><img src="пример.jpg" class="char"></a>
+    <p class="char-name">Аріко</p>
+</div>
+
+<div class="char-box">
+    <a href="character10.html"><img src="пример2.jpg" class="char"></a>
+    <p class="char-name">Еліана</p>
+</div>
+
+</div>
+
+<footer class="site-footer">
+  © Bet on life — Moonlight, Daraex, Neon Neon, Свята, Goldyn
+</footer>
+
+<script type="module">
+  // 🔹 Вставляємо твій firebaseConfig
+  const firebaseConfig = {
+    apiKey: "AIzaSyDfVhC6r49PkrUcL9etw35KC809gva9xME",
+    authDomain: "last-chance-79208.firebaseapp.com",
+    projectId: "last-chance-79208",
+    storageBucket: "last-chance-79208.firebasestorage.app",
+    messagingSenderId: "804424139867",
+    appId: "1:804424139867:web:a9309f6886b65c7223eb7e"
+  };
+
+  // 🔹 Імпорти Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+  // 🔹 Ініціалізація Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // 🔢 Лічильник переглядів
+  const viewRef = doc(db, "stats", "views");
+
+  async function addView() {
+    const snap = await getDoc(viewRef);
+
+    if(!snap.exists()){
+      await setDoc(viewRef, { count: 1 });
+      document.getElementById("views").innerText = 1;
+    } else {
+      await updateDoc(viewRef, { count: increment(1) });
+      document.getElementById("views").innerText = snap.data().count + 1;
+    }
+  }
+
+  addView();
+</script>
+
+</body>
+</html>  
