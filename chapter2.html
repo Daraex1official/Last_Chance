@@ -11,18 +11,15 @@ body{
     font-family:Arial;
     background:#0f0f0f;
     color:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    overflow:hidden;
 }
 
 #reader{
     width:100%;
     max-width:600px;
-    height:100%;
+    height:100vh;
+    margin:auto;
     position:relative;
+    overflow:hidden;
 }
 
 #reader img{
@@ -33,21 +30,27 @@ body{
     user-select:none;
 }
 
-/* область для кліків */
+/* області кліку */
 .nav-left, .nav-right{
     position:absolute;
     top:0;
     width:50%;
     height:100%;
-    cursor:pointer;
+    z-index:10;
 }
 
-.nav-left{
-    left:0;
-}
+.nav-left{ left:0; }
+.nav-right{ right:0; }
 
-.nav-right{
-    right:0;
+.page-info{
+    position:absolute;
+    bottom:10px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(0,0,0,0.6);
+    padding:8px 12px;
+    border-radius:10px;
+    font-size:14px;
 }
 </style>
 </head>
@@ -55,27 +58,31 @@ body{
 <body>
 
 <div id="reader">
-    <img id="currentPage" src="заставка2.jpg" alt="Сторінка 1">
-	function showPage(index){
-    document.getElementById("currentPage").src = pages[index];
-    document.getElementById("pageNumber").innerText = index + 1;
-}
-	<div class="page-info">
-  <p>Назва коміксу: Last chance</p>
-  <p>Глава: 2</p>
-  <p>Сторінка: <span id="pageNumber">1</span> / 3</p>
-</div>
+    <img id="currentPage" src="page2_1.jpg" alt="Сторінка">
+
+    <div class="page-info">
+        <p>Назва коміксу: Last chance</p>
+        <p>Глава: 2</p>
+        <p>Сторінка: <span id="pageNumber">1</span> / 4</p>
+    </div>
 
     <div class="nav-left" onclick="prevPage()"></div>
     <div class="nav-right" onclick="nextPage()"></div>
 </div>
 
 <script>
-let pages = ["заставка2.jpg","Приклад3.jpg","Приклад4.jpg","Приклад5.jpg"]; // сюди вставляй всі картинки своєї манги
+let pages = [
+    "page2_1.jpg",
+    "page2_2.jpg",
+    "page2_3.jpg",
+    "page2_4.jpg"
+];
+
 let current = 0;
 
 function showPage(index){
     document.getElementById("currentPage").src = pages[index];
+    document.getElementById("pageNumber").innerText = index + 1;
 }
 
 function nextPage(){
@@ -92,18 +99,18 @@ function prevPage(){
     }
 }
 
-// Додатково можна свайп для телефону
+/* свайп */
 let startX = 0;
 let reader = document.getElementById("reader");
 
-reader.addEventListener('touchstart', function(e){
+reader.addEventListener("touchstart", e=>{
     startX = e.touches[0].clientX;
 });
 
-reader.addEventListener('touchend', function(e){
+reader.addEventListener("touchend", e=>{
     let endX = e.changedTouches[0].clientX;
-    if(endX < startX - 30) nextPage(); // свайп вліво → наступна
-    if(endX > startX + 30) prevPage(); // свайп вправо → попередня
+    if(endX < startX - 40) nextPage();
+    if(endX > startX + 40) prevPage();
 });
 </script>
 
