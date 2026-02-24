@@ -395,6 +395,95 @@ h1{
         text-align: center;
     }
 }
+
+	/* === ПЛАВНІ ПЕРЕХОДИ === */
+* {
+    transition: all 0.3s ease;
+}
+
+/* === МОБІЛЬНА ВЕРСІЯ === */
+@media (max-width: 900px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    .container {
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+        padding: 15px;
+    }
+
+    /* ОБЛОЖКА */
+    .cover img {
+        width: 85%;
+        max-width: 320px;
+        margin: 0 auto 15px auto;
+        display: block;
+        border-radius: 15px;
+    }
+
+    /* ТЕКСТ + ІНФО */
+    .info {
+        width: 100%;
+        margin: 0;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .info h1,
+    .info h2,
+    .info p {
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+
+    /* СТАТИСТИКА */
+    .stats {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    /* ПЕРСОНАЖІ */
+    .characters {
+        position: static;
+        width: 100%;
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .characters .char {
+        width: 90px;
+        border-radius: 12px;
+    }
+
+    .char-name {
+        font-size: 12px;
+        margin-top: 5px;
+        text-align: center;
+    }
+
+    /* КНОПКА */
+    .button {
+        width: 90%;
+        margin: 15px auto;
+        text-align: center;
+        padding: 12px;
+    }
+
+    /* СПИСОК ГЛАВ */
+    .chapters {
+        width: 100%;
+        margin: 0;
+        padding: 10px;
+    }
+}
 	
 </style>
 </head>
@@ -573,3 +662,4 @@ h1{
 </body>
 
 </html>  
+
